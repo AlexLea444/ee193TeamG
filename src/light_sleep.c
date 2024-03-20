@@ -18,7 +18,7 @@ esp_err_t set_timer_wakeup(void) {
 }
 
 static void light_sleep(void *args) {
-        while (true) {
+        while (1) {
                 ESP_LOGI("light sleep", "Entering light sleep");
                 /* To make sure the complete line is printed before entering 
                  * sleep mode, need to wait until UART TX FIFO is empty:
@@ -48,5 +48,4 @@ static void light_sleep(void *args) {
                                 break;
                 }
         }
-        vTaskDelete(NULL);
 }

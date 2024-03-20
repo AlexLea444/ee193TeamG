@@ -172,7 +172,6 @@ static void i2c_test_task(void *arg) {
         // Check that VDD of IC is not set too low
         ESP_LOGI("i2c", "TASK[%d] test cnt: %d", (int)task_idx, cnt++);
         ret = ic_read_register(I2C_MASTER_NUM, &user_register);
-        xSemaphoreTake(print_mux, portMAX_DELAY);
         if (ret == ESP_ERR_TIMEOUT) {
                 ESP_LOGE("i2c", "I2C Timeout");
         } else if (ret == ESP_OK) {
@@ -184,12 +183,10 @@ static void i2c_test_task(void *arg) {
                 else
                         printf("VDD OK\n");
         }
-        xSemaphoreGive(print_mux);
         vTaskDelay((DELAY_TIME_BETWEEN_ITEMS_MS * (task_idx + 1)) / portTICK_PERIOD_MS);
 
         // Update the resolution of the IC output to desired
         ret = ic_update_res(I2C_MASTER_NUM, 0x3);
-        xSemaphoreTake(print_mux, portMAX_DELAY);
         if (ret == ESP_ERR_TIMEOUT) {
                 ESP_LOGE("i2c", "I2C Timeout");
         } else if (ret == ESP_OK) {
@@ -197,14 +194,12 @@ static void i2c_test_task(void *arg) {
                 printf("TASK[%d]  HOST UPDATE RES( SI7054 )\n", (int)task_idx);
                 printf("*******************\n");
         }
-        xSemaphoreGive(print_mux);
         vTaskDelay((DELAY_TIME_BETWEEN_ITEMS_MS * (task_idx + 1)) / portTICK_PERIOD_MS);
         
         // Continuously read out temperature readings
         while (1) {
                 ESP_LOGI("i2c", "TASK[%d] test cnt: %d", (int)task_idx, cnt++);
                 ret = ic_probe_temp(I2C_MASTER_NUM, &sensor_data_h, &sensor_data_l);
-                xSemaphoreTake(print_mux, portMAX_DELAY);
                 if (ret == ESP_ERR_TIMEOUT) {
                         ESP_LOGE("i2c", "I2C Timeout");
                 } else if (ret == ESP_OK) {
@@ -218,11 +213,8 @@ static void i2c_test_task(void *arg) {
                 } else {
                         ESP_LOGW("i2c", "%s: No ack, sensor not connected...skip...", esp_err_to_name(ret));
                 }
-                xSemaphoreGive(print_mux);
                 vTaskDelay((DELAY_TIME_BETWEEN_ITEMS_MS * (task_idx + 1)) / portTICK_PERIOD_MS);
                 //---------------------------------------------------
         }
-        vSemaphoreDelete(print_mux);
-        vTaskDelete(NULL);
 }
 

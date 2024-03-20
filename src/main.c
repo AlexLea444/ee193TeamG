@@ -15,7 +15,7 @@
 #include "i2c.h"
 #include "light_sleep.h"
 
-SemaphoreHandle_t print_mux = NULL;
+// SemaphoreHandle_t print_mux = NULL;
 
 
 
@@ -50,15 +50,12 @@ void app_main() {
         esp_mqtt_client_publish(client, "alea01/")
 
         vTaskDelay(1000 / portTICK_PERIOD_MS);*/
-        print_mux = xSemaphoreCreateMutex();
         ESP_ERROR_CHECK(i2c_master_init());
-        xTaskCreate(i2c_test_task, "i2c_test_task", 1024 * 2, (void *)0, 10, NULL);
         
         for (;;) {
                 vTaskDelay(1000 / portTICK_PERIOD_MS);
-                print_mux = xSemaphoreCreateMutex();
                 ESP_ERROR_CHECK(set_timer_wakeup());
-                xTaskCreate(light_sleep, "light_sleep_task", 4096, NULL, 6, NULL);
-                xTaskCreate(i2c_test_task, "i2c_test_task", 1024 * 2, (void *)0, 10, NULL);
+                light_sleep("light_sleep_task");
+                i2c_test_task("i2c_test_task");
         }
 }
