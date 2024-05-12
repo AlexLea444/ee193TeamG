@@ -17,7 +17,7 @@
 #include "lwip/err.h"
 #include "lwip/sys.h"
 
-#define WIFI_MAXIMUM_RETRIES  2  // Maximum number of times to retry if connecting fails
+#define WIFI_MAXIMUM_RETRIES  7  // Maximum number of times to retry if connecting fails
 
 // Minimal acceptable authentication (open, WEP, WPA, WPA2, etc.)
 #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_OPEN
@@ -127,4 +127,3 @@ void wifi_connect(const char* ssid, const char* pass)
         ESP_LOGE(TAG, "UNEXPECTED EVENT");
     }
 }
-

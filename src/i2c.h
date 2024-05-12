@@ -3,7 +3,6 @@
 
 #include "driver/gpio.h"
 #include "driver/i2c.h"
-
 /*
  * Important values for SI7054-A20-IM
  * https://www.silabs.com/documents/public/data-sheets/Si7050-1-3-4-5-A20-1.pdf
@@ -37,10 +36,11 @@
 
 #define DELAY_TIME_BETWEEN_ITEMS_MS 1000
 
-static esp_err_t ic_read_register(i2c_port_t i2c_num, uint8_t *user_reg);
-static esp_err_t ic_update_res(i2c_port_t i2c_num, uint8_t resolution);
-static esp_err_t ic_probe_temp(i2c_port_t i2c_num, uint8_t *data_h, uint8_t *data_l); 
-static esp_err_t i2c_master_init(void);
-static void i2c_test_task(void *arg);
+esp_err_t ic_read_register(i2c_port_t i2c_num, uint8_t *user_reg);
+esp_err_t ic_update_res(i2c_port_t i2c_num, uint8_t resolution);
+esp_err_t ic_probe_temp(i2c_port_t i2c_num, uint8_t *data_h, uint8_t *data_l); 
+esp_err_t i2c_master_init(void);
+void scan_temperature(char *temp_result);
+float get_temp();
 
 #endif
